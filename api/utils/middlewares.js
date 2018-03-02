@@ -51,7 +51,6 @@ const compareUserPW = (req, res, next) => {
           if (err) return next(err);
           if (isValid) {
             req.username = user.username;
-            res.status(200).json({ success: true });
             next();
           } else {
             res.status(422).json({ error: 'Invalid username or password' });

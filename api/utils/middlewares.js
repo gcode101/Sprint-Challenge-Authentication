@@ -26,6 +26,15 @@ const encryptUserPW = (req, res, next) => {
   // TODO: Fill this middleware in with the Proper password encrypting, bcrypt.hash()
   // Once the password is encrypted using bcrypt you'll need to set a user obj on req.user with the encrypted PW
   // Once the user is set, call next and head back into the userController to save it to the DB
+  if (!username || !password) {
+    return res.status(422).json({ error: 'Please provide and username and a password' });
+  }
+  bcrypt.hash(password, 11, (err, hash) => {
+    if (err) return next(err);
+    const newUser = new User({ username, password: hash });
+    req.user = newUser;
+    next();
+  })
 };
 
 const compareUserPW = (req, res, next) => {
